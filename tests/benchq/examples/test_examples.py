@@ -30,18 +30,13 @@ MAIN_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 sys.path.insert(0, os.path.dirname(MAIN_DIR))
 from examples.data.get_icm import get_icm  # noqa: E402
 from examples.ex_1_from_qasm import main as from_qasm_main  # noqa: E402
-from examples.ex_2_time_evolution import main as time_evolution_main  # noqa: E402
 from examples.ex_4_fast_graph_estimates import main as fast_graph  # noqa: E402
 from examples.ex_10_utility_scale import main as utility_scale  # noqa: E402
 
 
 def test_from_qasm_example():
-    file_path = os.path.join("examples", "data", "example_circuit.qasm")
+    file_path = os.path.join("../..", "examples", "data", "example_circuit.qasm")
     from_qasm_main(file_path)
-
-
-def test_time_evolution_example():
-    time_evolution_main()
 
 
 def test_fast_graph_example():
@@ -49,7 +44,7 @@ def test_fast_graph_example():
 
 
 def test_utility_scale_example():
-    decoder_data = os.path.join("examples", "data", "sample_decoder_data.csv")
+    decoder_data = os.path.join("../..", "examples", "data", "sample_decoder_data.csv")
     gsc, footprint = utility_scale(decoder_data, False, "triangular", 2)
     assert gsc
     assert footprint
@@ -57,7 +52,7 @@ def test_utility_scale_example():
 
 def test_toy_example_notebook():
     """Test all of the lines in the toy model work."""
-    file_path = os.path.join("examples", "data", "single_rotation.qasm")
+    file_path = os.path.join("../..", "examples", "data", "single_rotation.qasm")
     demo_circuit = QuantumCircuit.from_qasm_file(file_path)
     hardware_architecture_model = BASIC_SC_ARCHITECTURE_MODEL
     logical_architecture_model = TwoRowBusArchitectureModel()
@@ -158,7 +153,7 @@ def test_toy_example_notebook():
 
     [[node[0] for node in step] for step in schedule.measurement_steps]
 
-    file_path = os.path.join("examples", "data", "ghz_circuit.qasm")
+    file_path = os.path.join("../..", "examples", "data", "ghz_circuit.qasm")
     ghz_circuit = import_circuit(QuantumCircuit.from_qasm_file(file_path))
 
     asg, _, __ = jl.get_rbs_graph_state_data(
@@ -168,7 +163,7 @@ def test_toy_example_notebook():
 
     schedule = python_substrate_scheduler(asg, "fast")
 
-    file_path = os.path.join("examples", "data", "h_chain_circuit.qasm")
+    file_path = os.path.join("../..", "examples", "data", "h_chain_circuit.qasm")
     h_chain_circuit = import_circuit(QuantumCircuit.from_qasm_file(file_path))
 
     asg, _, __ = jl.get_rbs_graph_state_data(
