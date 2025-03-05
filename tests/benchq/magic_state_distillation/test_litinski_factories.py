@@ -3,7 +3,9 @@ from dataclasses import replace
 
 import pytest
 
-from benchq.magic_state_distillation.litinski_factories import iter_litinski_factories
+from benchq.magic_state_distillation_modeling.litinski_factories import (
+    iter_litinski_factories,
+)
 from benchq.quantum_hardware_modeling.hardware_architecture_models import (
     BASIC_ION_TRAP_ARCHITECTURE_MODEL,
     BASIC_SC_ARCHITECTURE_MODEL,

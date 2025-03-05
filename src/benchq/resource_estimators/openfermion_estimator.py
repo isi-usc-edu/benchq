@@ -18,7 +18,9 @@ import math
 from typing import Iterable, Optional, Tuple
 
 from ..decoder_modeling.decoder_resource_estimator import get_decoder_info
-from ..magic_state_distillation.autoccz_factories import iter_all_openfermion_factories
+from ..magic_state_distillation_modeling.autoccz_factories import (
+    iter_all_openfermion_factories,
+)
 from ..quantum_hardware_modeling import (
     BASIC_SC_ARCHITECTURE_MODEL,
     BasicArchitectureModel,

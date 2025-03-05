@@ -14,7 +14,10 @@ from ..decoder_modeling import DecoderModel
 from ..logical_architecture_modeling.graph_based_logical_architectures import (
     GraphBasedLogicalArchitectureModel,
 )
-from ..magic_state_distillation import find_optimal_factory, iter_litinski_factories
+from ..magic_state_distillation_modeling import (
+    find_optimal_factory,
+    iter_litinski_factories,
+)
 from ..quantum_hardware_modeling import (
     BasicArchitectureModel,
     DetailedArchitectureModel,
