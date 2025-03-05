@@ -1,22 +1,10 @@
 ################################################################################
 # © Copyright 2022-2023 Zapata Computing Inc.
 ################################################################################
-import os
-import pathlib
-
-import networkx as nx
-import numpy as np
-import pytest
-import stim
 from numba import njit
 from orquestra.integrations.qiskit.conversions import import_from_qiskit
 from orquestra.quantum.circuits import CNOT, CZ, Circuit, H, S, T, X
-from qiskit import QuantumCircuit
 
-from benchq.compilation.circuits import (
-    compile_to_native_gates,
-    pyliqtr_transpile_to_clifford_t,
-)
 from benchq.compilation.graph_states import jl
 
 

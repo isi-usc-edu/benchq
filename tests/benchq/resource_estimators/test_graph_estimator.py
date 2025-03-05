@@ -45,11 +45,6 @@ def optimization(request):
     return request.param
 
 
-@pytest.fixture(params=[True, False])
-def transpile_to_clifford_t(request):
-    return request.param
-
-
 @pytest.mark.parametrize(
     "architecture_model, supports_hardware_resources",
     [
@@ -62,7 +57,6 @@ def test_resource_estimations_returns_results_for_different_hardware_architectur
     optimization,
     architecture_model,
     supports_hardware_resources,
-    transpile_to_clifford_t,
 ):
 
     logical_architecture_model = TwoRowBusArchitectureModel()
@@ -73,8 +67,6 @@ def test_resource_estimations_returns_results_for_different_hardware_architectur
         [Circuit([H(0), RZ(np.pi / 4)(0), CNOT(0, 1)])], 1, lambda x: [0]
     )
     algorithm_implementation = AlgorithmImplementation(quantum_program, error_budget, 1)
-    if transpile_to_clifford_t:
-        algorithm_implementation = algorithm_implementation.transpile_to_clifford_t()
 
     estimator = GraphResourceEstimator(optimization)
     gsc_resource_estimates = estimator.compile_and_estimate(
@@ -167,7 +159,7 @@ def test_resource_estimations_returns_results_for_different_hardware_architectur
     ],
 )
 def test_get_resource_estimations_for_program_gives_correct_results(
-    quantum_program, expected_results, transpile_to_clifford_t, optimization
+    quantum_program, expected_results, optimization
 ):
     architecture_model = BASIC_SC_ARCHITECTURE_MODEL
     logical_architecture_model = TwoRowBusArchitectureModel()
@@ -175,8 +167,6 @@ def test_get_resource_estimations_for_program_gives_correct_results(
     # set circuit generation weight to 0
     error_budget = ErrorBudget.from_weights(1e-3, 0, 1, 1)
     algorithm_implementation = AlgorithmImplementation(quantum_program, error_budget, 1)
-    if transpile_to_clifford_t:
-        algorithm_implementation = algorithm_implementation.transpile_to_clifford_t()
     estimator = GraphResourceEstimator(optimization)
 
     resource_estimates = estimator.compile_and_estimate(
@@ -200,7 +190,6 @@ def test_get_resource_estimations_for_program_gives_correct_results(
 
 def test_better_hardware_architecture_does_not_require_more_resources(
     optimization,
-    transpile_to_clifford_t,
 ):
     low_noise_architecture_model = BASIC_ION_TRAP_ARCHITECTURE_MODEL
     logical_architecture_model = TwoRowBusArchitectureModel()
@@ -251,7 +240,6 @@ def test_better_hardware_architecture_does_not_require_more_resources(
 
 def test_higher_error_budget_does_not_require_more_resources(
     optimization,
-    transpile_to_clifford_t,
 ):
     architecture_model = BASIC_SC_ARCHITECTURE_MODEL
     low_failure_tolerance = 1e-3
@@ -272,13 +260,6 @@ def test_higher_error_budget_does_not_require_more_resources(
     algorithm_implementation_high_error_budget = AlgorithmImplementation(
         quantum_program, high_error_budget, 1
     )
-    if transpile_to_clifford_t:
-        algorithm_implementation_low_error_budget = (
-            algorithm_implementation_low_error_budget.transpile_to_clifford_t()
-        )
-        algorithm_implementation_high_error_budget = (
-            algorithm_implementation_high_error_budget.transpile_to_clifford_t()
-        )
 
     estimator = GraphResourceEstimator(optimization)
 

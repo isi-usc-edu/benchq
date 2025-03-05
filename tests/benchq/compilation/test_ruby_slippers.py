@@ -15,10 +15,10 @@ from qiskit import QuantumCircuit
 
 from benchq.compilation.circuits import (
     compile_to_native_gates,
-    pyliqtr_transpile_to_clifford_t,
 )
 from benchq.compilation.graph_states import jl
 from benchq.problem_embeddings.quantum_program import QuantumProgram
+
 
 SKIP_SLOW = pytest.mark.skipif(
     os.getenv("SLOW_BENCHMARKS") is None,
@@ -143,8 +143,6 @@ def test_tocks_layers_and_qubits_are_correct(
     ],
 )
 def test_stabilizer_states_are_the_same_for_circuits(filename):
-    # we want to repeat the experiment here since pyliqtr_transpile_to_clifford_t
-    # is a random process.
     try:
         qiskit_circuit = import_from_qiskit(QuantumCircuit.from_qasm_file(filename))
     except FileNotFoundError:
@@ -176,59 +174,6 @@ def test_stabilizer_states_are_the_same_for_circuits(filename):
     assert_tableaus_correspond_to_the_same_stabilizer_state(
         graph_tableau, target_tableau
     )
-
-
-@SKIP_SLOW
-@pytest.mark.parametrize(
-    "filename",
-    [
-        "single_rotation.qasm",
-        "example_circuit.qasm",
-    ],
-)
-def test_stabilizer_states_are_the_same_for_circuits_with_decomposed_rotations(
-    filename,
-):
-    # we want to repeat the experiment here since pyliqtr_transpile_to_clifford_t
-    # is a random process.
-    try:
-        qiskit_circuit = import_from_qiskit(QuantumCircuit.from_qasm_file(filename))
-    except FileNotFoundError:
-        qiskit_circuit = import_from_qiskit(
-            QuantumCircuit.from_qasm_file(os.path.join("examples", "data", filename))
-        )
-
-    # pyliqtr_transpile_to_clifford_t is random and cannot be seeded
-    # so multiple trials are needed
-    for i in range(1, 10):
-        clifford_t = pyliqtr_transpile_to_clifford_t(
-            qiskit_circuit, circuit_precision=10**-2
-        )
-        test_circuit = get_icm(clifford_t)
-        test_circuit = compile_to_native_gates(test_circuit)
-
-        target_tableau = get_target_tableau(test_circuit)
-
-        # ensure state does not teleport
-        hyperparams = jl.RbSHyperparams(
-            jl.UInt16(999), jl.UInt8(4), jl.UInt8(6), jl.UInt32(1e5), jl.UInt8(0)
-        )
-        asg, pauli_tracker, _ = jl.get_rbs_graph_state_data(
-            test_circuit,
-            verbose=False,
-            takes_graph_input=False,
-            gives_graph_output=False,
-            optimization="Time",
-            hyperparams=hyperparams,
-        )
-        asg = jl.python_asg(asg)
-        vertices = list(zip(asg["sqs"], asg["edge_data"]))
-
-        graph_tableau = get_stabilizer_tableau_from_vertices(vertices)
-
-        assert_tableaus_correspond_to_the_same_stabilizer_state(
-            graph_tableau, target_tableau
-        )
 
 
 @pytest.mark.parametrize(
@@ -297,56 +242,6 @@ def test_teleportation_produces_correct_number_of_nodes_for_small_circuits(
         + (n_t_gates + n_rotations)
         + teleportation_distance * num_teleportations
     )
-
-
-@pytest.mark.parametrize(
-    "filename",
-    [
-        "single_rotation.qasm",
-        "example_circuit.qasm",
-    ],
-)
-def test_teleportation_produces_correct_node_parity_for_large_circuits(
-    filename,
-):
-    # we want to repeat the experiment here since pyliqtr_transpile_to_clifford_t
-    # is a random process.
-    try:
-        qiskit_circuit = import_from_qiskit(QuantumCircuit.from_qasm_file(filename))
-    except FileNotFoundError:
-        qiskit_circuit = import_from_qiskit(
-            QuantumCircuit.from_qasm_file(os.path.join("examples", "data", filename))
-        )
-
-    # pyliqtr_transpile_to_clifford_t is random and cannot be seeded
-    # so multiple trials are needed
-    for i in range(1, 10):
-        clifford_t = pyliqtr_transpile_to_clifford_t(
-            qiskit_circuit, circuit_precision=10**-2
-        )
-
-        quantum_program = QuantumProgram.from_circuit(clifford_t)
-        n_t_gates = quantum_program.n_t_gates
-
-        # set threshold low so we teleport many times
-        hyperparams = jl.RbSHyperparams(
-            jl.UInt16(3), jl.UInt8(4), jl.UInt8(6), jl.UInt32(1e5), jl.UInt8(0)
-        )
-        asg, pauli_tracker, _ = jl.get_rbs_graph_state_data(
-            clifford_t,
-            verbose=False,
-            takes_graph_input=False,
-            gives_graph_output=False,
-            optimization="Time",
-            hyperparams=hyperparams,
-        )
-        asg = jl.python_asg(asg)
-
-        n_nodes = len(asg["sqp"])
-
-        assert n_nodes >= n_t_gates
-        # teleportation only adds 2 nodes at a time.
-        assert (n_nodes - n_t_gates - clifford_t.n_qubits) % 2 == 0
 
 
 # @pytest.mark.skip(reason="This test requires hyperparameter tuning.")

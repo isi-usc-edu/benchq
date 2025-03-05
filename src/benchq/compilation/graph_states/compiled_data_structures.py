@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Callable, List, Sequence
 
 from ...problem_embeddings.quantum_program import QuantumProgram
-from ..circuits import get_num_t_gates_per_rotation
+from ...rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
 
 
 @dataclass
