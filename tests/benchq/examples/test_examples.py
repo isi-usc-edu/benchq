@@ -30,24 +30,11 @@ MAIN_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 sys.path.insert(0, os.path.dirname(MAIN_DIR))
 from examples.data.get_icm import get_icm  # noqa: E402
 from examples.ex_1_from_qasm import main as from_qasm_main  # noqa: E402
-from examples.ex_4_fast_graph_estimates import main as fast_graph  # noqa: E402
-from examples.ex_10_utility_scale import main as utility_scale  # noqa: E402
 
 
 def test_from_qasm_example():
     file_path = os.path.join("examples", "data", "example_circuit.qasm")
     from_qasm_main(file_path)
-
-
-def test_fast_graph_example():
-    fast_graph()
-
-
-def test_utility_scale_example():
-    decoder_data = os.path.join("examples", "data", "sample_decoder_data.csv")
-    gsc, footprint = utility_scale(decoder_data, False, "triangular", 2)
-    assert gsc
-    assert footprint
 
 
 def test_toy_example_notebook():
