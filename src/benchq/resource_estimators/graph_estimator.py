@@ -1,32 +1,25 @@
-import warnings
 from decimal import Decimal, getcontext
-from math import ceil
-from pathlib import Path
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Optional
 
 from benchq.decoder_modeling.decoder_resource_estimator import get_decoder_info
 
 from ..algorithms.data_structures import AlgorithmImplementation
-from ..compilation.circuits.pyliqtr_transpilation import get_num_t_gates_per_rotation
 from ..compilation.graph_states.compiled_data_structures import (
     CompiledAlgorithmImplementation,
-    CompiledQuantumProgram,
 )
 from ..decoder_modeling import DecoderModel
 from ..logical_architecture_modeling.graph_based_logical_architectures import (
     GraphBasedLogicalArchitectureModel,
 )
-from ..magic_state_distillation import find_optimal_factory, iter_litinski_factories
+from ..magic_state_distillation_modeling import (
+    find_optimal_factory,
+    iter_litinski_factories,
+)
 from ..quantum_hardware_modeling import (
     BasicArchitectureModel,
     DetailedArchitectureModel,
 )
-from ..quantum_hardware_modeling.devitt_surface_code import (
-    get_total_logical_failure_rate,
-    logical_cell_error_rate,
-    physical_qubits_per_logical_qubit,
-)
-from ..visualization_tools.resource_allocation import QECCycleAllocation
+from ..rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
 from .resource_info import (
     AbstractLogicalResourceInfo,
     GraphExtra,

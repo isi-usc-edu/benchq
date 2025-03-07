@@ -8,11 +8,8 @@ from typing import Callable, List, Sequence
 
 from orquestra.quantum.circuits import Circuit, GateOperation, I, ResetOperation
 
-from ..compilation.circuits import (
-    compile_to_native_gates,
-    get_num_t_gates_per_rotation,
-    pyliqtr_transpile_to_clifford_t,
-)
+from ..compilation.circuits import compile_to_native_gates
+from ..rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
 
 
 class QuantumProgram:
@@ -114,19 +111,6 @@ class QuantumProgram:
             steps=self.steps,
             calculate_subroutine_sequence=self.calculate_subroutine_sequence,
         )
-
-    def transpile_to_clifford_t(
-        self,
-        transpilation_failure_tolerance: float,
-    ) -> "QuantumProgram":
-        tolerances = _distribute_transpilation_failure_tolerance_over_program(
-            self, transpilation_failure_tolerance
-        )
-        circuits = [
-            pyliqtr_transpile_to_clifford_t(circuit, circuit_precision=tolerance)
-            for circuit, tolerance in zip(self.subroutines, tolerances)
-        ]
-        return self.replace_circuits(circuits)
 
     def get_n_t_gates_after_synthesis(self, transpilation_failure_tolerance: float):
         if self.n_rotation_gates == 0:

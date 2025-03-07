@@ -3,7 +3,6 @@ import itertools
 import pytest
 from orquestra.quantum.circuits import CNOT, RX, Circuit, H, S, X, Z
 
-from benchq.compilation.circuits import pyliqtr_transpile_to_clifford_t
 from benchq.compilation.graph_states import jl
 
 
@@ -28,13 +27,6 @@ from benchq.compilation.graph_states import jl
         # cnot chain
         pytest.param(
             Circuit([H(0)] + [CNOT(i, i + 1) for i in range(100)]), id="CNOT chain"
-        ),
-        # rotation chain
-        pytest.param(
-            pyliqtr_transpile_to_clifford_t(
-                Circuit([RX(0.237482734682374687)(0)]), 1e-10
-            ),
-            id="rotation chain",
         ),
     ],
 )

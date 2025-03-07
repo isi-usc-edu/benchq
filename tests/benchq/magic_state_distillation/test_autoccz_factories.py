@@ -1,4 +1,6 @@
-from benchq.magic_state_distillation.autoccz_factories import iter_auto_ccz_factories
+from benchq.magic_state_distillation_modeling.autoccz_factories import (
+    iter_auto_ccz_factories,
+)
 
 
 def test_factory_properties_are_correct():
