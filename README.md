@@ -73,8 +73,6 @@ those too, set environmental variable `SLOW_BENCHMARKS` to any value, e.g.:
 SLOW_BENCHMARKS=1 pytest benchmarks/
 ```
 
-These benchmarks are run automatically on each release. You can see the performance of benchq over time on [benchq's benchmark page](https://zapatacomputing.github.io/benchq/dev/bench/).
-
 ## Development and Contribution
 
 To install the development version, run `pip install -e '.[dev]'` from the main directory.
