@@ -13,12 +13,9 @@ from orquestra.integrations.qiskit.conversions import import_from_qiskit
 from orquestra.quantum.circuits import CNOT, CZ, Circuit, Dagger, H, S, T, X
 from qiskit import QuantumCircuit
 
-from benchq.compilation.circuits import (
-    compile_to_native_gates,
-)
+from benchq.compilation.circuits import compile_to_native_gates
 from benchq.compilation.graph_states import jl
 from benchq.problem_embeddings.quantum_program import QuantumProgram
-
 
 SKIP_SLOW = pytest.mark.skipif(
     os.getenv("SLOW_BENCHMARKS") is None,

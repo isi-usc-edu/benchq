@@ -4,9 +4,6 @@ from typing import Iterable, Optional
 from benchq.decoder_modeling.decoder_resource_estimator import get_decoder_info
 
 from ..algorithms.data_structures import AlgorithmImplementation
-from ..rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
-
-
 from ..compilation.graph_states.compiled_data_structures import (
     CompiledAlgorithmImplementation,
 )
@@ -22,6 +19,7 @@ from ..quantum_hardware_modeling import (
     BasicArchitectureModel,
     DetailedArchitectureModel,
 )
+from ..rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
 from .resource_info import (
     AbstractLogicalResourceInfo,
     GraphExtra,

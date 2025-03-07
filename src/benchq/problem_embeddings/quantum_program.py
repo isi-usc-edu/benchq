@@ -8,9 +8,7 @@ from typing import Callable, List, Sequence
 
 from orquestra.quantum.circuits import Circuit, GateOperation, I, ResetOperation
 
-from ..compilation.circuits import (
-    compile_to_native_gates,
-)
+from ..compilation.circuits import compile_to_native_gates
 from ..rotation_synthesis_modeling.gridsynth import get_num_t_gates_per_rotation
 
 
